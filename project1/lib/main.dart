@@ -43,6 +43,8 @@ class ScaffoldRoute extends StatefulWidget {
 }
 
 class _ScaffoldRouteState extends State<ScaffoldRoute> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,10 +69,41 @@ class _ScaffoldRouteState extends State<ScaffoldRoute> {
         }),
       ),
       drawer: MyDrawer(),
+      bottomNavigationBar: BottomAppBar(
+        notchMargin: 4.0, // 添加这一行
+        color: Colors.white,
+        shape: CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () => {},
+            ),
+            SizedBox(),
+            IconButton(
+              icon: Icon(Icons.business),
+              onPressed: () => {},
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceAround, //均分底部导航栏横向空间
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        shape: CircleBorder(),
+        onPressed: () {},
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Center(
         child: Text('Hello World'),
       ),
     );
+  }
+
+  void _onItemTapped(int value) {
+    setState(() {
+      _selectedIndex = value;
+    });
   }
 }
 
@@ -89,16 +122,35 @@ class MyDrawer extends StatelessWidget {
               padding: const EdgeInsets.only(top: 38.0),
               child: Row(
                 children: <Widget>[
-                  ClipOval(
-                    child: Image.asset(
-                      "assets/images/user.png",
-                      width: 80,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ClipOval(
+                      child: Image.asset(
+                        "assets/images/user.png",
+                        width: 80,
+                      ),
                     ),
                   ),
+                  Text(
+                    "YYJ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
                 ],
               ),
             ),
-            Expanded(child: ListView())
+            Expanded(
+                child: ListView(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.add),
+                  title: Text("Add"),
+                ),
+                ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text("Settings"),
+                ),
+              ],
+            ))
           ],
         ),
       ),
