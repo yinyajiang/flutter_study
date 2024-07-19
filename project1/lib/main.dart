@@ -1,3 +1,4 @@
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,8 +32,70 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ScaffoldRoute(),
+      home: InfiniteListView(),
     );
+  }
+}
+
+class InfiniteListView extends StatefulWidget {
+  const InfiniteListView({super.key});
+  @override
+  _InfiniteListViewState createState() => _InfiniteListViewState();
+}
+
+class _InfiniteListViewState extends State<InfiniteListView> {
+  static const _loadingTag = '##loading##';
+  var _words = <String>[_loadingTag];
+
+  @override
+  void initState() {
+    super.initState();
+    _retrieveData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: _words.length,
+        itemBuilder: (context, index) {
+          if (_words[index] == _loadingTag) {
+            if (_words.length - 1 < 100) {
+              _retrieveData();
+              return Container(
+                padding: const EdgeInsets.all(20.0),
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
+              );
+            } else {
+              return Container(
+                padding: const EdgeInsets.all(20.0),
+                alignment: Alignment.center,
+                child: Text('No more data'),
+              );
+            }
+          }
+          return ListTile(
+            title: Text(_words[index]),
+          );
+        },
+      ),
+    );
+  }
+
+  void _retrieveData() {
+    Future.delayed(Duration(seconds: 2)).then((e) {
+      setState(() {
+        _words.insertAll(_words.length - 1,
+            generateWordPairs().take(20).map((e) => e.asPascalCase).toList());
+      });
+    });
   }
 }
 
