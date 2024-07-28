@@ -1,5 +1,9 @@
-import 'package:english_words/english_words.dart';
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,191 +36,125 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: InfiniteListView(),
+      home: TestRoute(),
     );
   }
 }
 
-class InfiniteListView extends StatefulWidget {
-  const InfiniteListView({super.key});
-  @override
-  _InfiniteListViewState createState() => _InfiniteListViewState();
-}
-
-class _InfiniteListViewState extends State<InfiniteListView> {
-  static const _loadingTag = '##loading##';
-  var _words = <String>[_loadingTag];
-
-  @override
-  void initState() {
-    super.initState();
-    _retrieveData();
-  }
-
+class TestRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: _words.length,
-        itemBuilder: (context, index) {
-          if (_words[index] == _loadingTag) {
-            if (_words.length - 1 < 100) {
-              _retrieveData();
-              return Container(
-                padding: const EdgeInsets.all(20.0),
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ),
-                ),
-              );
-            } else {
-              return Container(
-                padding: const EdgeInsets.all(20.0),
-                alignment: Alignment.center,
-                child: Text('No more data'),
-              );
-            }
-          }
-          return ListTile(
-            title: Text(_words[index]),
-          );
-        },
-      ),
-    );
-  }
-
-  void _retrieveData() {
-    Future.delayed(Duration(seconds: 2)).then((e) {
-      setState(() {
-        _words.insertAll(_words.length - 1,
-            generateWordPairs().take(20).map((e) => e.asPascalCase).toList());
-      });
-    });
-  }
-}
-
-class ScaffoldRoute extends StatefulWidget {
-  const ScaffoldRoute({super.key});
-  @override
-  _ScaffoldRouteState createState() => _ScaffoldRouteState();
-}
-
-class _ScaffoldRouteState extends State<ScaffoldRoute> {
-  int _selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text('App Name', style: TextStyle(color: Colors.white)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.share),
-            color: Colors.white,
-            onPressed: () {},
-          ),
-        ],
-        leading: Builder(builder: (context) {
-          return IconButton(
-            icon: Icon(Icons.dashboard),
-            color: Colors.white,
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          );
-        }),
-      ),
-      drawer: MyDrawer(),
-      bottomNavigationBar: BottomAppBar(
-        notchMargin: 4.0, // 添加这一行
-        color: Colors.white,
-        shape: CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
-        child: Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () => {},
-            ),
-            SizedBox(),
-            IconButton(
-              icon: Icon(Icons.business),
-              onPressed: () => {},
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.spaceAround, //均分底部导航栏横向空间
+    return Material(
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        shape: CircleBorder(),
-        onPressed: () {},
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Center(
-        child: Text('Hello World'),
-      ),
-    );
-  }
-
-  void _onItemTapped(int value) {
-    setState(() {
-      _selectedIndex = value;
-    });
-  }
-}
-
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 38.0),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: ClipOval(
-                      child: Image.asset(
-                        "assets/images/user.png",
-                        width: 80,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    "YYJ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
+        slivers: <Widget>[
+          SliverFexibleHeader(
+            visibleExtent: 200,
+            builder: (context, maxExtent) => GestureDetector(
+              child: Image(
+                image: const AssetImage("assets/images/sea.png"),
+                width: 50,
+                height: maxExtent,
+                alignment: Alignment.bottomCenter,
+                fit: BoxFit.cover,
               ),
             ),
-            Expanded(
-                child: ListView(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.add),
-                  title: Text("Add"),
-                ),
-                ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text("Settings"),
-                ),
-              ],
-            ))
-          ],
-        ),
+          )
+        ],
       ),
+    );
+  }
+}
+
+typedef SliverFexibleHeaderBuilder = Widget Function(
+    BuildContext context, double maxExtent);
+
+class SliverFexibleHeader extends StatelessWidget {
+  const SliverFexibleHeader({
+    super.key,
+    required this.builder,
+    this.visibleExtent = 0.0,
+  });
+
+  final double visibleExtent;
+  final SliverFexibleHeaderBuilder builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return _SliverFexibleHeader(
+      visibleExtent: visibleExtent,
+      child: LayoutBuilder(
+        builder: (context, constraints) =>
+            builder(context, constraints.maxHeight),
+      ),
+    );
+  }
+}
+
+class _SliverFexibleHeader extends SingleChildRenderObjectWidget {
+  const _SliverFexibleHeader({
+    Key? key,
+    required Widget? child,
+    this.visibleExtent = 0.0,
+  }) : super(key: key, child: child);
+  final double visibleExtent;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return _FlexibleHeaderRenderSliver(visibleExtent: visibleExtent);
+  }
+
+  @override
+  void updateRenderObject(BuildContext context,
+      covariant _FlexibleHeaderRenderSliver renderObject) {
+    renderObject..visibleExtent = visibleExtent;
+  }
+}
+
+class _FlexibleHeaderRenderSliver extends RenderSliverSingleBoxAdapter {
+  _FlexibleHeaderRenderSliver({
+    required double visibleExtent,
+  }) : _visibleExtent = visibleExtent;
+  double _visibleExtent;
+
+  @override
+  set visibleExtent(double value) {
+    if (_visibleExtent == value) {
+      return;
+    }
+    _visibleExtent = value;
+    markNeedsLayout();
+  }
+
+  @override
+  double get visibleExtent => _visibleExtent;
+
+  @override
+  void performLayout() {
+    if (child == null || constraints.scrollOffset >= visibleExtent) {
+      geometry = SliverGeometry(scrollExtent: visibleExtent);
+      return;
+    }
+    double overScroll =
+        constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
+    var paintExtent = visibleExtent + overScroll - constraints.scrollOffset;
+    paintExtent = min(paintExtent, constraints.remainingPaintExtent);
+
+    child!.layout(
+      constraints.asBoxConstraints(maxExtent: paintExtent),
+      parentUsesSize: true,
+    );
+
+    var layoutExtent = min(_visibleExtent, paintExtent);
+
+    geometry = SliverGeometry(
+      scrollExtent: visibleExtent,
+      paintOrigin: -overScroll,
+      paintExtent: paintExtent,
+      maxPaintExtent: paintExtent,
+      layoutExtent: layoutExtent,
     );
   }
 }
