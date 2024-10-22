@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
 import 'app.dart';
 
-void main() => runApp(const SizeTransitionExampleApp());
+void main() => runApp(const MyApp());
