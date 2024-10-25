@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:gh_client/models/cache_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "../models/profile.dart";
 
@@ -20,9 +21,10 @@ class Global {
       profile =
           Profile.fromJson(jsonDecode(_prefs.getString("profile") ?? "{}"));
     } catch (e) {
-      profile = Profile();
+      profile = Profile()..theme = 0;
     }
+    profile.cache = profile.cache ?? CacheConfig();
 
-    return Future.value();
+    return;
   }
 }
