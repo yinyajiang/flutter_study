@@ -23,8 +23,15 @@ class Global {
     } catch (e) {
       profile = Profile()..theme = 0;
     }
-    profile.cache = profile.cache ?? CacheConfig();
+    profile.cache = profile.cache ?? CacheConfig()
+      ..enable = true
+      ..maxAge = 3600
+      ..maxCount = 100;
 
     return;
+  }
+
+  static saveProfile() {
+    _prefs.setString("profile", jsonEncode(profile.toJson()));
   }
 }
