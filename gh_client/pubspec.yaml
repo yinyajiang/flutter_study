@@ -41,6 +41,7 @@ dependencies:
   json_annotation: ^4.9.0
   collection: ^1.18.0
   shared_preferences: ^2.3.2
+  dio: ^5.7.0
   
 
 dev_dependencies:

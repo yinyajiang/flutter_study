@@ -53,7 +53,7 @@ class LocaleModel extends ProfileChangeNotifier {
   String? get locale => _profile.locale;
 
   set locale(String? locale) {
-    Global.profile.locale = locale;
+    _profile.locale = locale;
     notifyListeners();
   }
 }
