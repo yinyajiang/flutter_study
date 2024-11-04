@@ -4,6 +4,7 @@ import 'pages/home/home_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'pages/theme/theme_provider.dart';
+import 'pages/root/root_page.dart';
 
 Size get designSize {
   final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: Provider.of<ThemeProvider>(context, listen: true).themeData,
           darkTheme: Provider.of<ThemeProvider>(context).darkTheme,
-          home: const HomePage(),
+          home: const RootPage(),
         );
       },
     );
