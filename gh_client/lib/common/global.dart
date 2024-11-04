@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:gh_client/models/cache_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "../models/profile.dart";
+import "net_cache.dart";
 
 class Global {
   static late SharedPreferences _prefs;
   static late Profile profile;
+  static late NetCache netCache;
   static List<MaterialColor> get themes => <MaterialColor>[
         Colors.blue,
         Colors.cyan,
@@ -27,6 +29,8 @@ class Global {
       ..enable = true
       ..maxAge = 3600
       ..maxCount = 100;
+
+    netCache = NetCache();
 
     return;
   }
