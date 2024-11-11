@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:e_book/utils/toast_utils.dart';
 
 class ResponseInterceptor extends Interceptor {
   @override
@@ -14,8 +14,7 @@ class ResponseInterceptor extends Interceptor {
     } else if (err.type == DioExceptionType.unknown) {
       errorMsg = "未知错误，请稍后再试";
     }
-    debugPrint(errorMsg);
-    //ToastUtil.showToast(errorMsg);
+    ToastUtils.showErrorMsg(errorMsg);
     return handler.next(err);
   }
 }

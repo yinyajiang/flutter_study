@@ -5,6 +5,7 @@ import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:e_book/pages/components/my_book_tile.dart';
 import 'package:e_book/pages/components/my_search_tile.dart';
+import 'package:e_book/pages/home/home_vm.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -53,6 +54,14 @@ class _HomePageState extends State<HomePage> {
     "https://img9.doubanio.com/view/subject/m/public/s34888575.jpg",
     "https://img2.doubanio.com/mpic/book-activity-941912fa0c9143aab7d429f555fe05c1",
   ];
+
+  final HomeViewModel _viewModel = HomeViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel.getActivities();
+  }
 
   @override
   Widget build(BuildContext context) {

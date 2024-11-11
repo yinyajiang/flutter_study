@@ -7,14 +7,13 @@ class DioInstance {
 
   DioInstance._();
   static DioInstance instance() {
-    _instance ??= DioInstance._();
-    return _instance!;
+    return _instance ??= DioInstance._();
   }
 
   final Dio _dio = Dio();
   static const _defaultTimeout = Duration(seconds: 30);
 
-  void initDio({
+  DioInstance({
     Duration connectTimeout = _defaultTimeout,
     Duration receiveTimeout = _defaultTimeout,
     Duration sendTimeout = _defaultTimeout,
