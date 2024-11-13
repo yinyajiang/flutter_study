@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:e_book/http/spider/api_string.dart';
 
 class MyBookTile extends StatelessWidget {
-  static const ua =
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
   final List? books;
   final double width;
   final double height;
@@ -54,8 +53,8 @@ class MyBookTile extends StatelessWidget {
                               image: DecorationImage(
                                 image: CachedNetworkImageProvider(
                                   books?[index]['image'] ?? '',
-                                  headers: const {
-                                    'User-Agent': ua,
+                                  headers: {
+                                    'User-Agent': ApiString.ua,
                                   },
                                 ),
                                 fit: BoxFit.cover,
