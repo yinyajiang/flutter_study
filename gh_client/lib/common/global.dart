@@ -4,6 +4,7 @@ import 'package:gh_client/models/cache_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "../models/profile.dart";
 import "net_cache.dart";
+import "git_api.dart";
 
 class Global {
   static late SharedPreferences _prefs;
@@ -31,6 +32,7 @@ class Global {
       ..maxCount = 100;
 
     netCache = NetCache();
+    Git.init();
 
     return;
   }
