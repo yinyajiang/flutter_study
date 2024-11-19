@@ -42,6 +42,6 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future getBookActivities(int? kind) async {
-    this.activities = await SpiderApi.instance().fetchBookActivities(kind);
+    activities = await SpiderApi.instance().fetchBookActivities(kind);
   }
 }

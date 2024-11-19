@@ -11,7 +11,8 @@ class MyBookTile extends StatelessWidget {
   final double width;
   final double height;
   final String title;
-  final bool isShowPrice;
+  final bool showPrice;
+  final bool showRate;
 
   const MyBookTile({
     super.key,
@@ -19,7 +20,8 @@ class MyBookTile extends StatelessWidget {
     this.width = 120,
     this.height = 160,
     required this.title,
-    this.isShowPrice = false,
+    this.showPrice = false,
+    this.showRate = false,
   });
 
   @override
@@ -53,6 +55,8 @@ class MyBookTile extends StatelessWidget {
                   book: books![index],
                   width: width,
                   height: height,
+                  showPrice: showPrice,
+                  showRate: showRate,
                 );
               },
             ),

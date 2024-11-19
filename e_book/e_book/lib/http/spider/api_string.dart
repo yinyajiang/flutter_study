@@ -1,6 +1,8 @@
 class ApiString {
   static const String bookActivitiesJsonUrl =
       "https://book.douban.com/j/home/activities";
+  static const String bookExpressJsonUrl =
+      "https://book.douban.com/j/home/express_books";
   static const String bookDoubanHomeUrl = "https://book.douban.com";
   static const String bookActivityCoverReg = r"https:.*(?='\))";
   static const String ua =

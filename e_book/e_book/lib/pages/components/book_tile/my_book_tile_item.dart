@@ -3,17 +3,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_book/http/spider/api_string.dart';
 import 'package:e_book/model/book.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class MyBookTileItem extends StatelessWidget {
   final Book book;
   final double width;
   final double height;
-  final bool isShowPrice = false;
+  final bool showPrice;
+  final bool showRate;
+
   const MyBookTileItem({
     super.key,
     required this.book,
     required this.width,
     required this.height,
+    this.showPrice = false,
+    this.showRate = false,
   });
 
   @override
@@ -68,7 +73,7 @@ class MyBookTileItem extends StatelessWidget {
             child: Text(
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              book.authorName ?? '',
+              book.subtitle ?? book.authorName ?? '',
               style: TextStyle(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
@@ -76,13 +81,47 @@ class MyBookTileItem extends StatelessWidget {
               ),
             ),
           ),
+
+          //评分
+          _getRateUI(context, book),
+        ],
+      ),
+    );
+  }
+
+  Widget _getRateUI(BuildContext context, Book? book) {
+    if (!showRate) {
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.only(top: 6.h),
+      width: width,
+      child: Row(
+        children: [
+          RatingBar.builder(
+            itemCount: 5,
+            itemSize: 15.r,
+            ignoreGestures: true,
+            initialRating: (book?.rate ?? 0) / 2,
+            minRating: 1,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemPadding: EdgeInsets.only(right: 2.w),
+            itemBuilder: (context, index) {
+              return Icon(
+                Icons.star,
+                color: Theme.of(context).colorScheme.tertiary,
+              );
+            },
+            onRatingUpdate: (rating) {},
+          ),
         ],
       ),
     );
   }
 
   Widget _getPriceUI(BuildContext context, Book? book) {
-    if (!isShowPrice) {
+    if (!showPrice) {
       return const SizedBox();
     }
     return Positioned(
@@ -96,7 +135,7 @@ class MyBookTileItem extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            isShowPrice ? book?.toString() ?? '' : '',
+            showPrice ? book?.toString() ?? '' : '',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
               fontSize: 12.sp,

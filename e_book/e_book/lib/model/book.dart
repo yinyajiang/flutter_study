@@ -4,6 +4,7 @@ class Book {
     this.title,
     this.authorName,
     this.cover,
+    this.subtitle,
     this.rate,
   });
 
@@ -11,5 +12,6 @@ class Book {
   String? title;
   String? authorName;
   String? cover;
+  String? subtitle;
   double? rate;
 }
