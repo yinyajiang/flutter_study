@@ -43,11 +43,11 @@ class _MyBookActivityLabelsState extends State<MyBookActivityLabels> {
                     label: Text(widget.activityLabels[index]),
                     selected: _value == index,
                     onSelected: (value) {
-                      setState(() {
-                        _value = index;
-                      });
                       if (index != _value) {
                         widget.itemTap(index);
+                        setState(() {
+                          _value = index;
+                        });
                       }
                     },
                   ),
