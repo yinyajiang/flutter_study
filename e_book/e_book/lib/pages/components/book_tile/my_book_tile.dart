@@ -13,6 +13,7 @@ class MyBookTile extends StatelessWidget {
   final String title;
   final bool showPrice;
   final bool showRate;
+  final Function(Book)? onTap;
 
   const MyBookTile({
     super.key,
@@ -22,6 +23,7 @@ class MyBookTile extends StatelessWidget {
     required this.title,
     this.showPrice = false,
     this.showRate = false,
+    this.onTap,
   });
 
   @override
@@ -51,12 +53,15 @@ class MyBookTile extends StatelessWidget {
                     height: height,
                   );
                 }
-                return MyBookTileItem(
-                  book: books![index],
-                  width: width,
-                  height: height,
-                  showPrice: showPrice,
-                  showRate: showRate,
+                return GestureDetector(
+                  onTap: () => onTap != null ? onTap!(books![index]) : null,
+                  child: MyBookTileItem(
+                    book: books![index],
+                    width: width,
+                    height: height,
+                    showPrice: showPrice,
+                    showRate: showRate,
+                  ),
                 );
               },
             ),
