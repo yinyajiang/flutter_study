@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class BookDetailViewModel extends ChangeNotifier {
   Book? _book;
-  String? _content = '测试字符串' * 100; //简介内容
-  List<String>? _authors = ["作者1", "作者2"]; //作者
-  List<String>? _reviews = ["评论1", "评论2"]; //评论
+  String? _content; //简介内容
+  List<String>? _authors; //作者
+  List<String>? _reviews; //评论
   List<Book>? _similarBooks; //相似书籍
 
   Book? get book => _book;

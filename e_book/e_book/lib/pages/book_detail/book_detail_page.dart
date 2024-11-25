@@ -75,9 +75,13 @@ class _BookDetailPageState extends State<BookDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //定价、页数、评分
-          const MyBookDetailTile(
-            labels: ['定价', '页数', '评分'],
-            data: ['20', '2000', '4.5'],
+          Selector<BookDetailViewModel, Book?>(
+            selector: (context, viewModel) => viewModel.book,
+            builder: (context, book, child) {
+              return MyBookDetailTile(
+                labels: ['定价', '页数', '评分'],
+              );
+            },
           ),
 
           30.verticalSpace,
