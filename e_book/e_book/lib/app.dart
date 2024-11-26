@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'pages/theme/theme_provider.dart';
 import 'pages/root/root_page.dart';
+import 'utils/toast_utils.dart';
 
 Size get designSize {
   final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       designSize: designSize,
       builder: (context, child) {
         return MaterialApp(
+          navigatorKey: ToastUtils.navigatorKey,
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: Provider.of<ThemeProvider>(context, listen: true).themeData,

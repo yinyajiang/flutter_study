@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
+import 'my_book_content_tile_skeleton.dart';
 
 class MyBookContentTile extends StatelessWidget {
   final String? content;
@@ -17,7 +18,7 @@ class MyBookContentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (content == null) {
       //骨架屏
-      return const SizedBox();
+      return const MyBookContentTileSkeleton();
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@ import 'package:e_book/http/spider/api_string.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'my_author_tile_skeleton.dart';
 
 class MyAuthorTile extends StatelessWidget {
   final List<String>? authors;
@@ -11,7 +12,7 @@ class MyAuthorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (authors == null) {
       //骨架屏
-      return const SizedBox();
+      return MyAuthorTileSkeleton();
     }
     return Column(
       children: List.generate(authors?.length ?? 0, (index) {

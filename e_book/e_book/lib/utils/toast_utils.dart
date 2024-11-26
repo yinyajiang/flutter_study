@@ -6,6 +6,9 @@ import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ToastUtils {
+  static final navigatorKey = GlobalKey<NavigatorState>();
+  static BuildContext get context => navigatorKey.currentContext!;
+
   static const Color successColor = Color(0xFF75FB4C);
   static const Color errorColor = Color(0xFFEA3323);
   static const IconData successIcon = LineIcons.checkCircle;

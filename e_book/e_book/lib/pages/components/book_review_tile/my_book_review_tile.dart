@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e_book/pages/components/book_review_tile/my_book_review_item.dart';
+import 'package:e_book/pages/components/book_review_tile/my_book_review_item_skeleton.dart';
 
 class MyBookReviewTile extends StatelessWidget {
   final List<String>? reviews;
@@ -25,7 +26,7 @@ class MyBookReviewTile extends StatelessWidget {
           children: List.generate(reviews?.length ?? 4, (index) {
             if (reviews == null) {
               //骨架屏
-              return const SizedBox();
+              return MyBookReviewItemSkeleton();
             }
             return MyBookReviewItem(review: reviews![index]);
           }),
