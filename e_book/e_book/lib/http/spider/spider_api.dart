@@ -5,6 +5,8 @@ import '../../model/activity.dart';
 import 'package:html/dom.dart';
 import '../../model/book.dart';
 import '../../model/types.dart';
+import '../../model/author.dart';
+import '../../model/review.dart';
 
 class SpiderApi {
   static SpiderApi? _instance;
@@ -14,6 +16,13 @@ class SpiderApi {
   static SpiderApi instance() {
     return _instance ??= SpiderApi._();
   }
+
+  Future fetchBookDetail({
+    Function(Book?)? bookCallback,
+    Function(List<Author>?)? authorsCallback,
+    Function(List<Review>?)? reviewsCallback,
+    Function(List<Book>?)? similarBooksCallback,
+  }) async {}
 
   Future<List<Book>> fetchBookExpress() async {
     var response = await DioInstance.instance().get(

@@ -6,6 +6,9 @@ class Book {
     this.cover,
     this.subtitle,
     this.rate,
+    this.wordCount,
+    this.description,
+    this.buyInfo,
   });
 
   String? id;
@@ -14,4 +17,19 @@ class Book {
   String? cover;
   String? subtitle;
   double? rate;
+  String? wordCount;
+  String? description;
+  List<BuyInfo>? buyInfo;
+}
+
+class BuyInfo {
+  BuyInfo({
+    this.price,
+    this.url,
+    this.name,
+  });
+
+  String? price;
+  String? url;
+  String? name;
 }
