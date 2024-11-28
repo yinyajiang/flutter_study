@@ -5,6 +5,7 @@ import 'douban_store_vm.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e_book/model/book.dart';
+import 'package:e_book/utils/navigator_utils.dart';
 
 class DoubanStorePage extends StatefulWidget {
   const DoubanStorePage({super.key});
@@ -64,6 +65,9 @@ class _DoubanStorePageState extends State<DoubanStorePage> {
                   width: 120.w,
                   height: 160.h,
                   showRate: true,
+                  onTap: (book) {
+                    NavigatorUtils.nav2BookDetailPage(context, book: book);
+                  },
                 );
               },
             ),
@@ -78,6 +82,9 @@ class _DoubanStorePageState extends State<DoubanStorePage> {
                   title: '一周热门',
                   width: 120.w,
                   height: 160.h,
+                  onTap: (book) {
+                    NavigatorUtils.nav2BookDetailPage(context, book: book);
+                  },
                 );
               },
             ),
@@ -92,6 +99,9 @@ class _DoubanStorePageState extends State<DoubanStorePage> {
                   title: 'Top250',
                   width: 120.w,
                   height: 160.h,
+                  onTap: (book) {
+                    NavigatorUtils.nav2BookDetailPage(context, book: book);
+                  },
                 );
               },
             ),

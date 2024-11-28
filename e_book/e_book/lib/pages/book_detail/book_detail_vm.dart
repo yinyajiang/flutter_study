@@ -6,24 +6,17 @@ import 'package:e_book/model/review.dart';
 
 class BookDetailViewModel extends ChangeNotifier {
   Book? _book;
-  String? _content; //简介内容
   List<Author>? _authors; //作者
   List<Review>? _reviews; //评论
   List<Book>? _similarBooks; //相似书籍
 
-  Book? get book => _book;
-  String? get content => _content;
+  Book get book => _book ?? Book();
   List<Author>? get authors => _authors;
   List<Review>? get reviews => _reviews;
   List<Book>? get similarBooks => _similarBooks;
 
-  set book(Book? book) {
+  set book(Book book) {
     _book = book;
-    notifyListeners();
-  }
-
-  set content(String? content) {
-    _content = content;
     notifyListeners();
   }
 
@@ -42,9 +35,10 @@ class BookDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future getBookDetail() async {
+  Future getBookDetail(Book b) async {
     await SpiderApi.instance().fetchBookDetail(
-      bookCallback: (value) => book = value,
+      b,
+      bookCallback: (value) => book = value ?? book,
       authorsCallback: (value) => authors = value,
       reviewsCallback: (value) => reviews = value,
       similarBooksCallback: (value) => similarBooks = value,

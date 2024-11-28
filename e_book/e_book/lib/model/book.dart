@@ -9,6 +9,8 @@ class Book {
     this.wordCount,
     this.description,
     this.buyInfo,
+    this.page,
+    this.price,
   });
 
   String? id;
@@ -19,6 +21,8 @@ class Book {
   double? rate;
   String? wordCount;
   String? description;
+  int? page;
+  double? price;
   List<BuyInfo>? buyInfo;
 }
 
@@ -29,7 +33,7 @@ class BuyInfo {
     this.name,
   });
 
-  String? price;
+  double? price;
   String? url;
   String? name;
 }

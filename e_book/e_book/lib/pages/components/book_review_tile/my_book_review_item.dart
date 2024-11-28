@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e_book/http/spider/api_string.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:e_book/model/review.dart';
 
 class MyBookReviewItem extends StatelessWidget {
-  final String review;
+  final Review review;
   const MyBookReviewItem({super.key, required this.review});
 
   @override
@@ -21,7 +22,7 @@ class MyBookReviewItem extends StatelessWidget {
               //头像
               ClipOval(
                 child: CachedNetworkImage(
-                  imageUrl: 'https://via.placeholder.com/150',
+                  imageUrl: review.author?.avatar ?? "",
                   width: 40.r,
                   height: 40.r,
                   fit: BoxFit.cover,
@@ -36,7 +37,7 @@ class MyBookReviewItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '名称',
+                    review.author?.name ?? "",
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
@@ -45,7 +46,7 @@ class MyBookReviewItem extends StatelessWidget {
                   RatingBar.builder(
                     itemCount: 5,
                     ignoreGestures: true,
-                    initialRating: 9.8 / 2,
+                    initialRating: (review.rate ?? 0.0) / 2,
                     minRating: 1,
                     direction: Axis.horizontal,
                     allowHalfRating: true,
@@ -67,7 +68,7 @@ class MyBookReviewItem extends StatelessWidget {
 
           //评论
           Text(
-            review,
+            review.short ?? "",
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,

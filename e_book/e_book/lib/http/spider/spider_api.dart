@@ -17,12 +17,115 @@ class SpiderApi {
     return _instance ??= SpiderApi._();
   }
 
-  Future fetchBookDetail({
+  Future fetchBookDetail(
+    Book value, {
     Function(Book?)? bookCallback,
     Function(List<Author>?)? authorsCallback,
     Function(List<Review>?)? reviewsCallback,
     Function(List<Book>?)? similarBooksCallback,
-  }) async {}
+  }) async {
+    var doc = parse(await DioInstance.instance()
+        .getString(path: "${ApiString.bookDetailUrl}${value.id}"));
+    bookCallback?.call(parseBookDetail(value, doc));
+    authorsCallback?.call(parseAuthors(doc));
+    reviewsCallback?.call(parseReviews(doc));
+    similarBooksCallback?.call(parseSimilarBooks(doc));
+  }
+
+  Book parseBookDetail(Book value, Document doc) {
+    Element? divEl = doc.querySelector('.subjectwrap');
+    if (divEl == null) return value;
+    String text = divEl.querySelector('#info')?.text.trim() ?? "";
+    value.page = ApiString.getBookPage(text);
+    value.price = ApiString.getBookPrice(text);
+    value.rate = parseRate(divEl.querySelector('.rating_num')?.text.trim());
+
+    String desc =
+        doc.querySelector('.related_info .all .intro')?.text.trim() ?? "";
+    if (desc.isEmpty) {
+      desc = doc.querySelector('.related_info .intro')?.text.trim() ?? "";
+    }
+    value.description = desc;
+
+    List<Element> buyInfoEls = doc.querySelectorAll('.buyinfo ul li');
+    value.buyInfo = buyInfoEls.map((el) {
+      String priceStr =
+          el.querySelector('.price-wrapper .buylink-price')?.text.trim() ?? "";
+      priceStr = priceStr.replaceFirst("元", "");
+      return BuyInfo(
+        name: el.querySelector('.vendor-name span')?.text.trim(),
+        price: parseRate(priceStr),
+        url: el.querySelector('.vendor-name a')?.attributes['href'] ?? "",
+      );
+    }).toList();
+    return value;
+  }
+
+  List<Author> parseAuthors(Document doc) {
+    List<Element> aEls = doc.querySelectorAll(".authors-list .author");
+    List<Author> authors = [];
+    for (int i = 0; i < aEls.length - 1; i++) {
+      Element el = aEls[i];
+      String id = ApiString.getId(
+          el.children[0].attributes['href'] ?? "", ApiString.authorIdRegExp);
+      Element infoEl = el.children[1];
+      authors.add(Author(
+        id: id,
+        name: infoEl.children[0].text.trim(),
+        role: infoEl.children[1].text.trim(),
+        avatar: el.children[0].children[0].attributes['src'] ?? "",
+      ));
+    }
+    return authors;
+  }
+
+  List<Review> parseReviews(Document doc) {
+    var itemEls = doc.querySelectorAll('.review-list .review-item');
+    List<Review> reviews = [];
+    int count = 0;
+    for (int i = 0; i < itemEls.length; i++) {
+      if (count > 4) break;
+      Element item = itemEls[i];
+      Element hdEl = item.children[0];
+      Element bdEl = item.children[1];
+      Author author = Author(
+        name: hdEl.querySelector(".name")?.text.trim() ?? "",
+        avatar: hdEl.querySelector(".avator img")?.attributes['src'] ?? "",
+      );
+      var rate = Review.getRate(
+          hdEl.querySelector(".main-title-rating")?.attributes['title']);
+      String short = bdEl.querySelector(".short-content")?.text.trim() ?? "";
+      short = short.replaceFirst("(展开)", "").trim();
+      reviews.add(Review(
+        author: author,
+        rate: rate,
+        short: short,
+      ));
+      count++;
+    }
+    return reviews;
+  }
+
+  List<Book> parseSimilarBooks(Document doc) {
+    List<Element> dlEls = doc.querySelectorAll('#db-rec-section .content dl');
+    List<Book> books = [];
+    for (var dl in dlEls) {
+      if (dl.className == "clear") continue;
+      String? cover = dl.querySelector('img.m_sub_img')?.attributes['src'];
+      Element? aEl = dl.querySelector('dd a');
+      String? title = aEl?.text.trim();
+      String id =
+          ApiString.getId(aEl?.attributes['href'] ?? "", ApiString.bookIdReg);
+      double rate = parseRate(dl.querySelector('.subject-rate')?.text.trim());
+      books.add(Book(
+        id: id,
+        cover: cover,
+        title: title,
+        rate: rate,
+      ));
+    }
+    return books;
+  }
 
   Future<List<Book>> fetchBookExpress() async {
     var response = await DioInstance.instance().get(

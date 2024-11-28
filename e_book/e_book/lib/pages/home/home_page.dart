@@ -13,7 +13,7 @@ import 'package:e_book/pages/home/components/my_book_activity_labels.dart';
 import 'package:e_book/model/book.dart';
 import 'package:e_book/pages/home/components/my_book_activities_skeleton.dart';
 import 'package:e_book/pages/home/components/my_book_activity_labels_skeleton.dart';
-import 'package:e_book/pages/book_detail/book_detail_page.dart';
+import 'package:e_book/utils/navigator_utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -112,12 +112,7 @@ class _HomePageState extends State<HomePage> {
                     width: 120.w,
                     height: 160.h,
                     onTap: (book) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookDetailPage(book: book),
-                        ),
-                      );
+                      NavigatorUtils.nav2BookDetailPage(context, book: book);
                     },
                   );
                 },

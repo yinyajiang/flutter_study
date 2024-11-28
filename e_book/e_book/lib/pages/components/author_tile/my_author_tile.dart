@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'my_author_tile_skeleton.dart';
+import 'package:e_book/model/author.dart';
 
 class MyAuthorTile extends StatelessWidget {
-  final List<String>? authors;
+  final List<Author>? authors;
   const MyAuthorTile({super.key, this.authors});
 
   @override
   Widget build(BuildContext context) {
     if (authors == null) {
       //骨架屏
-      return MyAuthorTileSkeleton();
+      return const MyAuthorTileSkeleton();
     }
     return Column(
       children: List.generate(authors?.length ?? 0, (index) {
@@ -26,7 +27,7 @@ class MyAuthorTile extends StatelessWidget {
                 children: [
                   ClipOval(
                     child: CachedNetworkImage(
-                      imageUrl: 'https://via.placeholder.com/150',
+                      imageUrl: authors![index].avatar ?? "",
                       height: 40.r,
                       width: 40.r,
                       fit: BoxFit.cover,
@@ -40,14 +41,14 @@ class MyAuthorTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        authors![index],
+                        authors![index].name ?? "",
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        '作者',
+                        authors![index].role ?? "",
                         style: TextStyle(
                           fontSize: 13.sp,
                           color: Theme.of(context).colorScheme.inversePrimary,

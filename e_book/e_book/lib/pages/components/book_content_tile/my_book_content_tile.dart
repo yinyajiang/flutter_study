@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
 import 'my_book_content_tile_skeleton.dart';
+import 'package:e_book/model/book.dart';
 
 class MyBookContentTile extends StatelessWidget {
-  final String? content;
   final String? labelTitle;
-  final List<String>? labels;
+  final Book? book;
   const MyBookContentTile({
     super.key,
-    this.content,
     this.labelTitle,
-    this.labels,
+    this.book,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (content == null) {
+    if (book == null || book?.description == null) {
       //骨架屏
       return const MyBookContentTileSkeleton();
     }
@@ -29,7 +28,7 @@ class MyBookContentTile extends StatelessWidget {
         ),
         10.verticalSpace,
         ReadMoreText(
-          content ?? '',
+          book?.description ?? '',
           trimLines: 8,
           trimLength: 200,
           style: TextStyle(
@@ -56,13 +55,15 @@ class MyBookContentTile extends StatelessWidget {
 
         Wrap(
           children: List.generate(
-            labels?.length ?? 0,
+            book?.buyInfo?.length ?? 0,
             (index) {
               return Padding(
                 padding: EdgeInsets.only(right: 10.w),
                 child: ActionChip(
-                  label: Text(labels?[index] ?? '',
-                      style: TextStyle(fontSize: 12.sp)),
+                  label: Text(
+                    "${book?.buyInfo?[index].name ?? ''} ${book?.buyInfo?[index].price ?? ''}",
+                    style: TextStyle(fontSize: 12.sp),
+                  ),
                   onPressed: () {},
                 ),
               );

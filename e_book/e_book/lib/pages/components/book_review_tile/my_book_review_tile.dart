@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:e_book/pages/components/book_review_tile/my_book_review_item.dart';
 import 'package:e_book/pages/components/book_review_tile/my_book_review_item_skeleton.dart';
+import 'package:e_book/model/review.dart';
 
 class MyBookReviewTile extends StatelessWidget {
-  final List<String>? reviews;
+  final List<Review>? reviews;
   const MyBookReviewTile({super.key, required this.reviews});
 
   @override
@@ -26,7 +27,7 @@ class MyBookReviewTile extends StatelessWidget {
           children: List.generate(reviews?.length ?? 4, (index) {
             if (reviews == null) {
               //骨架屏
-              return MyBookReviewItemSkeleton();
+              return const MyBookReviewItemSkeleton();
             }
             return MyBookReviewItem(review: reviews![index]);
           }),

@@ -67,24 +67,32 @@ class MyBookTileItem extends StatelessWidget {
           ),
 
           //副标题
-          Container(
-            padding: EdgeInsets.only(top: 10.h),
-            width: width,
-            child: Text(
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              book.subtitle ?? book.authorName ?? '',
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
-            ),
-          ),
+          _getSubtitleUI(context, book),
 
           //评分
           _getRateUI(context, book),
         ],
+      ),
+    );
+  }
+
+  Widget _getSubtitleUI(BuildContext context, Book? book) {
+    if (book == null || (book.subtitle == null && book.authorName == null)) {
+      return const SizedBox();
+    }
+
+    return Container(
+      padding: EdgeInsets.only(top: 10.h),
+      width: width,
+      child: Text(
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        book.subtitle ?? book.authorName ?? '',
+        style: TextStyle(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
       ),
     );
   }
