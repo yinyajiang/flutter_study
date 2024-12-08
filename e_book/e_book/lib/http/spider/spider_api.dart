@@ -7,6 +7,7 @@ import '../../model/book.dart';
 import '../../model/types.dart';
 import '../../model/author.dart';
 import '../../model/review.dart';
+import '../../model/ebook_category.dart';
 
 class SpiderApi {
   static SpiderApi? _instance;
@@ -15,6 +16,18 @@ class SpiderApi {
 
   static SpiderApi instance() {
     return _instance ??= SpiderApi._();
+  }
+
+  Future fetchEBookStoreData({
+    Function(List<Book>)? recommendCallback,
+    Function(List<EBookCategory>)? categoriesCallback,
+  }) async {
+    String html =
+        await DioInstance.instance().getString(path: ApiString.ebookUrl);
+    Document doc = parse(html);
+
+    recommendCallback?.call(_parseRecommendEBooks(doc));
+    categoriesCallback?.call(_parseEBookCategories(doc));
   }
 
   Future fetchBookDetail(
@@ -270,5 +283,79 @@ class SpiderApi {
         title: dl.children[1].children[0].text.trim(),
       );
     }).toList();
+  }
+
+  //解析编辑推荐电子书
+  List<Book> _parseRecommendEBooks(Document doc) {
+    return _parseEBookByClass(doc, EBookType.recommend);
+  }
+
+  //解析电子书分类
+  List<EBookCategory> _parseEBookCategories(Document doc) {
+    return doc.querySelectorAll('.kinds .kinds-list a').map((a) {
+      return EBookCategory(
+        id: ApiString.getId(
+            a.attributes['href'] ?? "", ApiString.ebookCategoryIdRegExp),
+        name: a.text.trim(),
+        url: a.attributes['href'] ?? "",
+      );
+    }).toList();
+  }
+
+  //根据className获取节点
+  List<Book> _parseEBookByClass(Document doc, EBookType type) {
+    List<Element>? ulEls =
+        doc.querySelector("${type.clz} .slide-list")?.children;
+    List<Book> eBooks = [];
+    if (ulEls == null) return eBooks;
+
+    for (int i = 0; i < ulEls.length; i++) {
+      if (i > 1) {
+        break;
+      }
+      Element ul = ulEls[i];
+      eBooks.addAll(
+        ul.children.map(
+          (li) {
+            return _parseEBook(li, type == EBookType.recommend);
+          },
+        ),
+      );
+    }
+    return eBooks;
+  }
+
+  Book _parseEBook(Element element, bool isRecommend) {
+    //id
+    String? ebookId = ApiString.getId(
+        element.querySelector(".pic")?.attributes['href'] ?? "",
+        ApiString.bookIdReg);
+
+    //封面
+    String? cover = element
+        .querySelector(".pic img")
+        ?.attributes[isRecommend ? "data-src" : "src"];
+
+    //价格
+    String priceStr =
+        element.querySelector(".discount-price")?.text.trim() ?? "";
+    if (priceStr.isEmpty) {
+      priceStr = element.querySelector(".price-num")?.text.trim() ?? "";
+      if (priceStr.isEmpty) {
+        priceStr = element.querySelector(".price-tag")?.text.trim() ?? "";
+      } else {
+        double originPrice = ApiString.getEBookDiscountOrder(
+            element.querySelector(".discount")?.text.trim());
+        priceStr = '${originPrice - double.parse(priceStr)}';
+      }
+    }
+    priceStr = priceStr.replaceFirst("元", "");
+
+    return Book(
+      id: ebookId,
+      cover: cover,
+      title: element.querySelector(".title")?.text.trim() ?? "",
+      price: double.parse(priceStr),
+    );
   }
 }

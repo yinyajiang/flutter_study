@@ -143,7 +143,7 @@ class MyBookTileItem extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            showPrice ? book?.toString() ?? '' : '',
+            showPrice ? book?.price.toString() ?? '' : '',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
               fontSize: 12.sp,
